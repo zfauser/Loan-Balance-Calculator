@@ -61,7 +61,7 @@ float getValidFloat(string prompt, string errorMessage) {
   }
 
   float getMonthlyInterestRate(float annualRate) {
-    return annualRate / 12;
+    return (annualRate / 12);
   }
 
   float getMonthlyPayment() {
@@ -70,15 +70,30 @@ float getValidFloat(string prompt, string errorMessage) {
     return payment;
   }
 
-  bool canLoanBePaidOff(int amount, float monthlyRate, float payment) {
-    if ((amount * monthlyRate) - (payment * monthlyRate) > amount)
+  bool canLoanBePaidOff(float principle, float monthlyInterest, float payment) {
+    if (payment <= principle * monthlyInterest)
     {
       return false;
+    } else {
+      return true;
     }
-    return true;
+
   }
 
-  void calculateLoan() {}
+  void calculateLoan(float principle, float monthlyInterest, float payment) {
+    float newPrinciple = 0;
+    while (principle > 0)
+    {
+      month++;
+      float interest = (principle * monthlyInterest) - (payment * monthlyInterest);
+      newPrinciple = principle - payment + interest;
+      if (newPrinciple < 0)
+      {
+      }
+      cout << "Month: " << month << " | Previous Loan Amount: $" << principle << " | Payment: $" << payment << " | Interest: $" << interest << " | New Loan Amount: $" << newPrinciple << endl;
+      principle = newPrinciple;
+    }
+  }
 
   void displayPayments() {}
 
@@ -86,16 +101,12 @@ float getValidFloat(string prompt, string errorMessage) {
   {
     cout << "Howdy there, partner! I do declare that this loan calculator is the best in the west! Yeehaw!" << endl;
     loanAmount = getValidFloat("I reckon you should enter your loan amount: $", "Invalid input. Please enter a positive numeric value: $");
-    cout << loanAmount << endl;
     annualInterestRate = getAnnualInterestRate();
-    cout << annualInterestRate << endl;
     monthlyInterestRate = getMonthlyInterestRate(annualInterestRate);
-    cout << monthlyInterestRate << endl;
     monthlyPayment = getMonthlyPayment();
-    cout << monthlyPayment << endl;
     if (canLoanBePaidOff(loanAmount, monthlyInterestRate, monthlyPayment))
     {
-      calculateLoan();
+      calculateLoan(loanAmount, monthlyInterestRate, monthlyPayment);
       displayPayments();
     }
     else
