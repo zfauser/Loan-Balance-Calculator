@@ -1,0 +1,7 @@
+.ccls-cache/*
+main
+build/*
+.vscode/*
+.breakpoints
+main.dSYM/
+run.sh
