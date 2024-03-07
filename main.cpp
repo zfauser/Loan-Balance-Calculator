@@ -1,8 +1,11 @@
 #include <iostream>
+#include <iomanip> // Include the necessary header file
+#include "tabulate.hpp"
 #include "colors.h"
 
 // may use https://github.com/DenisSamilton/CppConsoleTable
 // TODO: Error trap only two decimal places for money
+// TODO: Fix table formatting
 
 using namespace std;
 
@@ -10,7 +13,7 @@ float loanAmount = 0;
 float annualInterestRate = 0;
 float monthlyInterestRate = 0;
 float monthlyPayment = 0;
-int month = 0;
+tabulate::Table paymentsTable;
 
 bool badFloatCharacters(string inputFloat)
 /*
@@ -80,7 +83,28 @@ float getValidFloat(string prompt, string errorMessage) {
 
   }
 
+  string FtoS(float inputFloat) {
+    // convert to string 2 decimal places
+    ostringstream oss;
+    oss << fixed << setprecision(2) << inputFloat; // Use std::ostringstream to format the float
+    return oss.str(); // Return the formatted string
+  }
+
+  void displayPayments(int month, float principle, float payment, float interest, float newPrinciple) {
+    // cout << "Month: " << month << " | Previous Loan Amount: $" << principle << " | Payment: $" << payment << " | Interest: $" << interest << " | New Loan Amount: $" << newPrinciple << endl;
+    if (month == 1)
+    {
+      // paymentsTable[0].format().font_align(tabulate::FontAlign::center);
+      paymentsTable.add_row({"Month", "Previous Loan Amount", "Payment", "Interest", "New Loan Amount"});
+    }
+    paymentsTable.add_row({FtoS(month), "$" + FtoS(principle), "$" + FtoS(payment), "$" + FtoS(interest), "$" + FtoS(newPrinciple)});
+  }
+/*
+  14, prev bal: 16.74, payment: 16.74, interest: 0.00, new bal: 0.00
+*/
+
   void calculateLoan(float principle, float monthlyInterest, float payment) {
+    int month = 0;
     float newPrinciple = 0;
     while (principle > 0)
     {
@@ -89,17 +113,25 @@ float getValidFloat(string prompt, string errorMessage) {
       newPrinciple = principle - payment + interest;
       if (newPrinciple < 0)
       {
+        payment = principle;
+        interest = 0;
+        newPrinciple = 0;
       }
-      cout << "Month: " << month << " | Previous Loan Amount: $" << principle << " | Payment: $" << payment << " | Interest: $" << interest << " | New Loan Amount: $" << newPrinciple << endl;
+      displayPayments(month, principle, payment, interest, newPrinciple);
       principle = newPrinciple;
     }
+    paymentsTable.format()
+        .border_left(" ")
+        .border_right(" ")
+        .corner(" ")
+        .padding_left(1)
+        .padding_right(1);
+    cout << paymentsTable << endl;
   }
-
-  void displayPayments() {}
 
   int main()
   {
-    cout << "Howdy there, partner! I do declare that this loan calculator is the best in the west! Yeehaw!" << endl;
+    cout << YELLOW << "Howdy there, partner! I do declare that this loan calculator is the best in the west! Yeehaw!" << RESET << endl;
     loanAmount = getValidFloat("I reckon you should enter your loan amount: $", "Invalid input. Please enter a positive numeric value: $");
     annualInterestRate = getAnnualInterestRate();
     monthlyInterestRate = getMonthlyInterestRate(annualInterestRate);
@@ -107,7 +139,6 @@ float getValidFloat(string prompt, string errorMessage) {
     if (canLoanBePaidOff(loanAmount, monthlyInterestRate, monthlyPayment))
     {
       calculateLoan(loanAmount, monthlyInterestRate, monthlyPayment);
-      displayPayments();
     }
     else
     {
