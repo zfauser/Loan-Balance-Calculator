@@ -1,4 +1,7 @@
 /*
+  Name: Zach Fauser
+  Date: March 8th, 2024
+  Purpose: This file contains the functions allow the user to input their loan information
 */
 
 #include <iostream>
@@ -184,6 +187,8 @@ bool canLoanBePaidOff(float principle, float monthlyInterest, float payment)
 
 bool askPlayAgain(tabulate::Table &paymentsTable)
 /*
+  Args:
+      paymentsTable: The table that is used to display the payments
   Returns:
     inputPlayAgain (bool): Returns true if the user wants to play again, and false if they do not
 */

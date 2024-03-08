@@ -9,10 +9,10 @@
 // Used for the colors in the program
 #include "colors.h"
 
-// Used for the functions that get the user's input
+// Used for the functions that get the user's input, please see the inputs.cpp file for more information
 #include "inputs.h"
 
-// Used for the functions that output the results
+// Used for the functions that output the results, please see the outputs.cpp file for more information
 #include "outputs.h"
 
 using namespace std;

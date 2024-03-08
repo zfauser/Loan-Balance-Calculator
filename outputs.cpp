@@ -1,3 +1,9 @@
+/*
+  Name: Zach Fauser
+  Date: March 8th, 2024
+  Purpose: This file contains the functions that output the results of the program
+*/
+
 #include <iostream>
 #include <limits>
 #include <iomanip>
