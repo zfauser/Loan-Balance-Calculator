@@ -1,10 +1,7 @@
-.ccls-cache/*
-main
-build/*
-.vscode/*
-.breakpoints
-main.dSYM/
-run.sh
-main
-.ccls-cache
-main
+**/main
+**/build/*
+**/.vscode/*
+**/.breakpoints
+**/main.dSYM/*
+**/run.sh
+**/.ccls-cache/*
