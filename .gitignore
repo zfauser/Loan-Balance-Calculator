@@ -5,6 +5,6 @@ build/*
 .breakpoints
 main.dSYM/
 run.sh
-./main
 main
-./.ccls-cache
+.ccls-cache
+main
