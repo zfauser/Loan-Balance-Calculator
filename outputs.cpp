@@ -151,7 +151,10 @@ void calculateLoan(float principle, float monthlyInterest, float payment)
   // Output the paymentsTable
   cout << paymentsTable << endl;
   // Output the amount of interest and principle that the user has paid
-  cout << "It cost you " << "$" + FtoS(totalInterest) << " in interest and $" + FtoS(originalPrinciple) << " in principle" << endl;
+  cout << "It cost you "
+       << "$" + FtoS(totalInterest)
+       << " in interest and $" + FtoS(originalPrinciple) << " in principle"
+       << endl;
   cout << "In total, you paid $" + FtoS(totalPayment) << endl;
   // Output the amount of months/years it will take to pay off the loan
   cout << "I do declare your loan to be paid off after " +
