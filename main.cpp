@@ -7,6 +7,7 @@
 
 using namespace std;
 
+// Global variables
 float loanAmount = 0;
 float annualInterestRate = 0;
 float monthlyInterestRate = 0;
@@ -17,57 +18,97 @@ tabulate::Table paymentsTable;
 bool badFloatCharacters(string inputFloat)
 /*
   Args:
-    inputNumber (string): The number that the user has inputted as a string
+    inputFloat (string): The float that the user has inputted as a string
   Returns:
-    bool: Returns true if the inputNumber contains an invalid character, and
+    bool: Returns true if the inputFloat contains an invalid character, and
   false if it does not
 */
 {
-  // For the length of the inputNumber, make sure each character is a number
+  // For the length of the inputNumber, make sure each character is a number or a decimal
   for (int i = 0; i < inputFloat.length(); i++) {
+    // if an invalid character is found, return true
     if (!isdigit(inputFloat[i]) && inputFloat[i] != '.') {
       return true;
     }
   }
+  // if no invalid characters are found, return false
   return false;
 }
 
-bool checkDecimalPlaces(string inputFloat, bool checkTwoDecimalPlaces) {
+bool checkDecimalPlaces(string inputFloat, bool checkTwoDecimalPlaces) 
+/*
+  Args:
+    inputFloat (string): The float that the user has inputted as a string
+    checkTwoDecimalPlaces (bool): A boolean that determins if the function should check for two decimal places
+  Returns:
+    bool: Returns true if the inputFloat contains more than two decimal places, and false if it does not
+*/
+{
   if (checkTwoDecimalPlaces) {
     int len = inputFloat.find_last_of('.');
     // if there is no decimal, return false
     if (len == -1) {
       return false;
     }
+    // erase the string up to the decimal
     inputFloat.erase(0, len + 1);
+    // if the length of the string after the decimal is greater than 2, return true
     int new_len = inputFloat.length();
     if (new_len > 2) {
       return true;
-    } else {
+    } 
+    // if the length of the string after the decimal is less than 2, return false
+    else {
       return false;
     }
-  } else {
+  } 
+  // if the function should not check for two decimal places, return false
+  else {
     return false;
   }
 }
 
-bool checkOneHundred(string inputFloat, bool check100) {
+bool checkOneHundred(string inputFloat, bool check100) 
+/*
+  Args: 
+    inputFloat (string): The float that the user has inputted as a string
+    check100 (bool): A boolean that determins if the function should check if the input is greater than 100
+  Returns:
+    bool: Returns true if the inputFloat is greater than 100, and false if it is not
+*/
+{
+  // if the function should check if the input is greater than 100
   if (check100) {
+    // if the input is greater than 100, return true
     if (stof(inputFloat) > 100) {
       return true;
-    } else {
+    } 
+    // if the input is less than 100, return false
+    else {
       return false;
     }
-  } else {
+  } 
+  // if the function should not check if the input is greater than 100, return false
+  else {
     return false;
   }
 }
 
 float getValidFloat(string prompt, string errorMessage,
-                    bool checkTwoDecimalPlaces, bool check100) {
+                    bool checkTwoDecimalPlaces, bool check100)
+/*
+  Args: 
+    prompt (string): The prompt that the user will see when asked to input a number
+    errorMessage (string): The error message that the user will see if they input an invalid number
+    checkTwoDecimalPlaces (bool): A boolean that determins if the function should check for two decimal places
+    check100 (bool): A boolean that determins if the function should check if the input is greater than 100
+  Returns:
+    outputFloat (float): The error trapped version of the float
+*/
+{
   string inputFloat = "0";
   // Ask the user to input a number
-  cout << GREEN << prompt;
+  cout << GREEN << prompt;    // Purposely did not reset color so that the users input is green
   cin >> inputFloat;
 
   // While the input is invalid, ask the user to input a number again
@@ -75,6 +116,7 @@ float getValidFloat(string prompt, string errorMessage,
          checkDecimalPlaces(inputFloat, checkTwoDecimalPlaces) || checkOneHundred(inputFloat, check100)) {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    // Display an error message
     cout << BOLD << RED << errorMessage;
     cin >> inputFloat;
     cout << RESET;
@@ -84,8 +126,14 @@ float getValidFloat(string prompt, string errorMessage,
   return outputFloat;
 }
 
-float getAnnualInterestRate() {
+float getAnnualInterestRate() 
+/*
+  Returns:
+    tempInterestRate (float): The annual interest rate that the user has inputted
+*/
+{
   float tempInterestRate = 0;
+  // Ask the user to input their annual interest rate
   tempInterestRate = getValidFloat(
       "I reckon you should enter your annual interest rate (%): ",
       "Invalid input. Please enter a positive numeric value that is less than or equal to 100 (%): ", false, true);
@@ -93,18 +141,24 @@ float getAnnualInterestRate() {
   return tempInterestRate / 100;
 }
 
-float getMonthlyInterestRate(float annualRate) { return (annualRate / 12); }
-
-float getMonthlyPayment() {
-  float payment = 0;
-  payment = getValidFloat("I reckon you should enter your monthly payment: $",
-                          "Invalid input. Please enter a positive numeric "
-                          "value with two decimal places: $",
-                          true, false);
-  return payment;
+float getMonthlyInterestRate(float annualRate) 
+/*
+  Arg:
+    annualRate (float): The annual interest rate that the user has inputted
+*/
+{
+  // convert to monthly interest rate
+  return (annualRate / 12);
 }
 
-bool canLoanBePaidOff(float principle, float monthlyInterest, float payment) {
+bool canLoanBePaidOff(float principle, float monthlyInterest, float payment) 
+/*
+  Args:
+    principle (float): The loan amount
+    monthlyInterest (float): The monthly interest rate
+    payment (float): The monthly payment
+*/
+{
   if (payment <= principle * monthlyInterest) {
     return false;
   } else {
@@ -121,27 +175,29 @@ string FtoS(float inputFloat) {
 }
 
 string displayMonthOrYear(int month) {
-  // if month is divisible by 12, return year
-  if (month % 12 == 0) {
-    if (month / 12 == 1) {
-      return to_string(month / 12) + " year";
-    } else {
-      return to_string(month / 12) + " years";
-    }
-  } else {
-    if (month == 1) {
-      return to_string(month) + " month";
-    } else {
-      return to_string(month) + " months";
-    }
+  int years = month / 12;
+  int months = month % 12;
+
+  string result = "";
+
+  if (years > 0) {
+    // This determine if the year should be plural or not, it does this by using a ternary operator
+    result += to_string(years) + (years > 1 ? " yrs. " : " yr. ");
   }
+
+  if (months > 0) {
+    // This determines if the month should be plural or not, and uses a ternary operator like the years if statement
+    result += to_string(months) + (months > 1 ? " mths." : " mth.");
+  }
+
+  return result;
 }
 
 void displayPayments(int month, float principle, float payment, float interest,
                      float newPrinciple) {
   if (month == 1) {
     cout << RESET;
-    paymentsTable.add_row({"Month", "Previous Principle", "Payment", "Interest",
+    paymentsTable.add_row({"Month/Year", "Previous Principle", "Payment", "Interest",
                            "New Principle"});
     paymentsTable.format()
         .font_align(tabulate::FontAlign::center)
@@ -159,6 +215,7 @@ void displayPayments(int month, float principle, float payment, float interest,
                          "$" + FtoS(payment), "$" + FtoS(interest),
                          "$" + FtoS(newPrinciple)});
 }
+
 
 void calculateLoan(float principle, float monthlyInterest, float payment) {
   int month = 0;
@@ -178,6 +235,7 @@ void calculateLoan(float principle, float monthlyInterest, float payment) {
   }
   paymentsTable.format();
   cout << paymentsTable << endl;
+  cout << "I do declare your loan to be paid off after " + displayMonthOrYear(month) << endl;
 }
 
 bool askPlayAgain()
@@ -201,6 +259,8 @@ bool askPlayAgain()
   // If the user wants to play again, set inputPlayAgain to true, otherwise set
   // it to false
   if (userAnswer == "Y" || userAnswer == "y") {
+    paymentsTable = tabulate::Table();
+    cout << endl << endl;
     inputPlayAgain = true;
   } else {
     inputPlayAgain = false;
@@ -220,11 +280,14 @@ int main() {
                                true, false);
     annualInterestRate = getAnnualInterestRate();
     monthlyInterestRate = getMonthlyInterestRate(annualInterestRate);
-    monthlyPayment = getMonthlyPayment();
+    monthlyPayment = getValidFloat("I reckon you should enter your monthly payment: $",
+                          "Invalid input. Please enter a positive numeric "
+                          "value with two decimal places: $",
+                          true, false);
     if (canLoanBePaidOff(loanAmount, monthlyInterestRate, monthlyPayment)) {
       calculateLoan(loanAmount, monthlyInterestRate, monthlyPayment);
     } else {
-      cout << "I reckon you can't pay off this loan with that payment." << endl;
+      cout << RED << BOLD << "I reckon you can't pay off this loan with that payment." << RESET << endl;
     }
     playAgain = askPlayAgain();
   }
