@@ -169,11 +169,13 @@ void calculateLoan(float principle, float monthlyInterest, float payment) {
 
 bool askPlayAgain() {
   char playAgain = '0';
-  cout << GREEN << "Would you like to calculate another loan? (y/n): " << RESET;
+  cout << GREEN << "Would you like to calculate another loan? (y/n): ";
   cin >> playAgain;
+  cin.clear();
+  cin.ignore(numeric_limits<streamsize>::max(), '\n');
   playAgain = tolower(playAgain);
   while (playAgain != 'y' && playAgain != 'n') {
-    cout << "Invalid input. Please enter 'y' or 'n': ";
+    cout << BOLD << RED << "Invalid input. Please enter 'y' or 'n': ";
     cin >> playAgain;
   }
   if (playAgain == 'y') {
