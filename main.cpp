@@ -51,8 +51,20 @@ bool checkDecimalPlaces(string inputFloat, bool checkTwoDecimalPlaces) {
   }
 }
 
+bool checkOneHundred(string inputFloat, bool check100) {
+  if (check100) {
+    if (stof(inputFloat) > 100) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
 float getValidFloat(string prompt, string errorMessage,
-                    bool checkTwoDecimalPlaces) {
+                    bool checkTwoDecimalPlaces, bool check100) {
   string inputFloat = "0";
   // Ask the user to input a number
   cout << GREEN << prompt;
@@ -60,11 +72,12 @@ float getValidFloat(string prompt, string errorMessage,
 
   // While the input is invalid, ask the user to input a number again
   while (cin.fail() || badFloatCharacters(inputFloat) || stof(inputFloat) < 0 ||
-         checkDecimalPlaces(inputFloat, checkTwoDecimalPlaces)) {
+         checkDecimalPlaces(inputFloat, checkTwoDecimalPlaces) || checkOneHundred(inputFloat, check100)) {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cout << BOLD << RED << errorMessage;
     cin >> inputFloat;
+    cout << RESET;
   }
   // Convert the inputNumber to an integer
   float outputFloat = stof(inputFloat);
@@ -75,7 +88,7 @@ float getAnnualInterestRate() {
   float tempInterestRate = 0;
   tempInterestRate = getValidFloat(
       "I reckon you should enter your annual interest rate (%): ",
-      "Invalid input. Please enter a positive numeric value (%): ", false);
+      "Invalid input. Please enter a positive numeric value that is less than or equal to 100 (%): ", false, true);
   // convert to decimal
   return tempInterestRate / 100;
 }
@@ -87,7 +100,7 @@ float getMonthlyPayment() {
   payment = getValidFloat("I reckon you should enter your monthly payment: $",
                           "Invalid input. Please enter a positive numeric "
                           "value with two decimal places: $",
-                          true);
+                          true, false);
   return payment;
 }
 
@@ -167,24 +180,32 @@ void calculateLoan(float principle, float monthlyInterest, float payment) {
   cout << paymentsTable << endl;
 }
 
-bool askPlayAgain() {
-  char playAgain = '0';
-  cout << GREEN << "Would you like to calculate another loan? (y/n): ";
-  cin >> playAgain;
-  cin.clear();
-  cin.ignore(numeric_limits<streamsize>::max(), '\n');
-  playAgain = tolower(playAgain);
-  while (playAgain != 'y' && playAgain != 'n') {
-    cout << BOLD << RED << "Invalid input. Please enter 'y' or 'n': ";
-    cin >> playAgain;
+bool askPlayAgain()
+/*
+  Returns:
+    inputPlayAgain (bool): Returns true if the user wants to play again, and
+  false if they do not
+*/
+{
+  bool inputPlayAgain;
+  string userAnswer;
+  // Ask the user if they want to play again
+  cout << GREEN << "Would you like to play again? (Y or N): " << RESET;
+  cin >> userAnswer;
+  // While the input is invalid, ask the user to input a different answer
+  while (userAnswer != "Y" && userAnswer != "N" && userAnswer != "y" &&
+         userAnswer != "n") {
+    cout << BOLD << RED << "Invalid input. Please enter Y or N: " << RESET;
+    cin >> userAnswer;
   }
-  if (playAgain == 'y') {
-    paymentsTable = tabulate::Table();
-    cout << endl << endl;
-    return true;
+  // If the user wants to play again, set inputPlayAgain to true, otherwise set
+  // it to false
+  if (userAnswer == "Y" || userAnswer == "y") {
+    inputPlayAgain = true;
   } else {
-    return false;
+    inputPlayAgain = false;
   }
+  return inputPlayAgain;
 }
 
 int main() {
@@ -196,7 +217,7 @@ int main() {
     loanAmount = getValidFloat("I reckon you should enter your loan amount: $",
                                "Invalid input. Please enter a positive numeric "
                                "value with two decimal places: $",
-                               true);
+                               true, false);
     annualInterestRate = getAnnualInterestRate();
     monthlyInterestRate = getMonthlyInterestRate(annualInterestRate);
     monthlyPayment = getMonthlyPayment();
