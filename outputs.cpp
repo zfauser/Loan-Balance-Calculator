@@ -122,6 +122,8 @@ void calculateLoan(float principle, float monthlyInterest, float payment)
 {
   int month = 0;
   float newPrinciple = 0;
+  float totalInterest = 0;
+  float originalPrinciple = principle;
   // while the principle is greater than 0, calculate the interest and new
   // principle
   while (principle > 0) {
@@ -137,13 +139,20 @@ void calculateLoan(float principle, float monthlyInterest, float payment)
       interest = 0;
       newPrinciple = 0;
     }
+    // Add the interest to the total interest
+    totalInterest += interest;
     // Add the desired values to the paymentsTable
     displayPayments(month, principle, payment, interest, newPrinciple);
     // Set the principle to the new principle
     principle = newPrinciple;
   }
+  // Calculate the users total payment
+  float totalPayment = totalInterest + originalPrinciple;
   // Output the paymentsTable
   cout << paymentsTable << endl;
+  // Output the amount of interest and principle that the user has paid
+  cout << "It cost you " << "$" + FtoS(totalInterest) << " in interest and $" + FtoS(originalPrinciple) << " in principle" << endl;
+  cout << "In total, you paid $" + FtoS(totalPayment) << endl;
   // Output the amount of months/years it will take to pay off the loan
   cout << "I do declare your loan to be paid off after " +
               displayMonthOrYear(month)
