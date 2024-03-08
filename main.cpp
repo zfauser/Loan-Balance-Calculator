@@ -1,7 +1,9 @@
 /*
   Name: Zach Fauser
   Date: March 5th, 2024
-  Description: This program calculates the amount of time it will take to pay off a loam based on the loan amount, annual interest rate, and monthly payment.
+  Description: This program calculates the amount of time it will take to pay
+  off a loam based on the loan amount, annual interest rate, and monthly
+  payment.
 */
 
 #include <iostream>
@@ -9,10 +11,12 @@
 // Used for the colors in the program
 #include "colors.h"
 
-// Used for the functions that get the user's input, please see the inputs.cpp file for more information
+// Used for the functions that get the user's input, please see the inputs.cpp
+// file for more information
 #include "inputs.h"
 
-// Used for the functions that output the results, please see the outputs.cpp file for more information
+// Used for the functions that output the results, please see the outputs.cpp
+// file for more information
 #include "outputs.h"
 
 using namespace std;
@@ -32,24 +36,29 @@ int main() {
        << RESET << endl;
   // While the user wants to use the program...
   while (playAgain) {
-    // Get the loan amount, annual interest rate and, monthly payment from the user
+    // Get the loan amount, annual interest rate and, monthly payment from the
+    // user
     loanAmount = getValidFloat("I reckon you should enter your loan amount: $",
                                "Invalid input. Please enter a positive numeric "
                                "value with two decimal places: $",
                                true, false);
     annualInterestRate = getAnnualInterestRate();
     monthlyInterestRate = getMonthlyInterestRate(annualInterestRate);
-    monthlyPayment = getValidFloat("I reckon you should enter your monthly payment: $",
-                          "Invalid input. Please enter a positive numeric "
-                          "value with two decimal places: $",
-                          true, false);
+    monthlyPayment =
+        getValidFloat("I reckon you should enter your monthly payment: $",
+                      "Invalid input. Please enter a positive numeric "
+                      "value with two decimal places: $",
+                      true, false);
     // Check if the loan can be paid off with the monthly payment
     if (canLoanBePaidOff(loanAmount, monthlyInterestRate, monthlyPayment)) {
       // Calculate the loan
       calculateLoan(loanAmount, monthlyInterestRate, monthlyPayment);
     } else {
-      // Output a message if the loan cannot be paid off with the monthly payment
-      cout << RED << BOLD << "I reckon you can't pay off this loan with that payment." << RESET << endl;
+      // Output a message if the loan cannot be paid off with the monthly
+      // payment
+      cout << RED << BOLD
+           << "I reckon you can't pay off this loan with that payment." << RESET
+           << endl;
     }
     // Ask the user if they want to play again
     playAgain = askPlayAgain(paymentsTable);

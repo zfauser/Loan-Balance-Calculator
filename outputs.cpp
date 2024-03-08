@@ -1,27 +1,30 @@
 /*
   Name: Zach Fauser
   Date: March 8th, 2024
-  Purpose: This file contains the functions that output the results of the program
+  Purpose: This file contains the functions that output the results of the
+  program
 */
 
+#include <iomanip>
 #include <iostream>
 #include <limits>
-#include <iomanip>
 #include <string>
 
-// Include the outputs.h file so that the functions can be used in the main.cpp file
+// Include the outputs.h file so that the functions can be used in the main.cpp
+// file
 #include "outputs.h"
 
 // Include the colors.h file so that the colors can be used in this program
 #include "colors.h"
 
-// Used tabulate in order to output a table. source: https://github.com/p-ranav/tabulate
+// Used tabulate in order to output a table. source:
+// https://github.com/p-ranav/tabulate
 #include "tabulate.hpp"
 
 // Create a variable that will be used to output the payments table
 tabulate::Table paymentsTable;
 
-string FtoS(float inputFloat) 
+string FtoS(float inputFloat)
 /*
   Args:
     inputFloat (float): The float that the user has inputted
@@ -34,8 +37,7 @@ string FtoS(float inputFloat)
 {
   ostringstream convertedFloat;
   // Convert the float to a string with two decimal places
-  convertedFloat << fixed << setprecision(2)
-      << inputFloat; 
+  convertedFloat << fixed << setprecision(2) << inputFloat;
   return convertedFloat.str();
 }
 
@@ -54,20 +56,23 @@ string displayMonthOrYear(int month)
 
   // If the years are greater than 0, add the years to the result
   if (years > 0) {
-    // This determine if the year should be plural or not, it does this by using a ternary operator
+    // This determine if the year should be plural or not, it does this by using
+    // a ternary operator
     result += to_string(years) + (years > 1 ? " yrs. " : " yr. ");
   }
 
   // If the months are greater than 0, add the months to the result
   if (months > 0) {
-    // This determines if the month should be plural or not, and uses a ternary operator like the years if statement
+    // This determines if the month should be plural or not, and uses a ternary
+    // operator like the years if statement
     result += to_string(months) + (months > 1 ? " mths." : " mth.");
   }
 
   return result;
 }
 
-void displayPayments(int month, float principle, float payment, float interest, float newPrinciple)
+void displayPayments(int month, float principle, float payment, float interest,
+                     float newPrinciple)
 /*
   Args:
     month (int): The month that the user has inputted
@@ -76,14 +81,15 @@ void displayPayments(int month, float principle, float payment, float interest, 
     interest (float): The interest
     newPrinciple (float): The new loan amount
   Purpose:
-    Adds all of the values to the paymentsTable which is used to show the user the payments they must make
+    Adds all of the values to the paymentsTable which is used to show the user
+  the payments they must make
 */
 {
   // If the month is 1, define the tables properties
   if (month == 1) {
     cout << RESET;
-    paymentsTable.add_row({"Month/Year", "Previous Principle", "Payment", "Interest",
-                           "New Principle"});
+    paymentsTable.add_row({"Month/Year", "Previous Principle", "Payment",
+                           "Interest", "New Principle"});
     // Center the text and add borders to the table
     paymentsTable.format()
         .font_align(tabulate::FontAlign::center)
@@ -103,7 +109,6 @@ void displayPayments(int month, float principle, float payment, float interest, 
                          "$" + FtoS(newPrinciple)});
 }
 
-
 void calculateLoan(float principle, float monthlyInterest, float payment)
 /*
   Args:
@@ -117,14 +122,16 @@ void calculateLoan(float principle, float monthlyInterest, float payment)
 {
   int month = 0;
   float newPrinciple = 0;
-  // while the principle is greater than 0, calculate the interest and new principle
+  // while the principle is greater than 0, calculate the interest and new
+  // principle
   while (principle > 0) {
     month++;
     // Calculate the interest and new principle
     float interest =
         (principle * monthlyInterest) - (payment * monthlyInterest);
     newPrinciple = principle - payment + interest;
-    // If the new principle is less than 0, set the payment to the principle and the interest to 0
+    // If the new principle is less than 0, set the payment to the principle and
+    // the interest to 0
     if (newPrinciple < 0) {
       payment = principle;
       interest = 0;
@@ -138,5 +145,7 @@ void calculateLoan(float principle, float monthlyInterest, float payment)
   // Output the paymentsTable
   cout << paymentsTable << endl;
   // Output the amount of months/years it will take to pay off the loan
-  cout << "I do declare your loan to be paid off after " + displayMonthOrYear(month) << endl;
+  cout << "I do declare your loan to be paid off after " +
+              displayMonthOrYear(month)
+       << endl;
 }
