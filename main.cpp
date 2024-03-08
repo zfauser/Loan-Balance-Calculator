@@ -169,7 +169,7 @@ void calculateLoan(float principle, float monthlyInterest, float payment) {
 
 bool askPlayAgain() {
   char playAgain = '0';
-  cout << GREEN << "Would you like to calculate another loan? (y/n): " << RESET;
+  cout << GREEN << "Would you like to calculate another loan? (y/n): ";
   cin >> playAgain;
   playAgain = tolower(playAgain);
   while (playAgain != 'y' && playAgain != 'n') {
