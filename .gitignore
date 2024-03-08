@@ -7,3 +7,4 @@ main.dSYM/
 run.sh
 ./main
 main
+./.ccls-cache
