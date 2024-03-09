@@ -1,6 +1,7 @@
 /*
   Name: Zach Fauser
   Date: March 5th, 2024
+  Repository: https://github.com/zfauser/Loan-Balance-Calculator
   Description: This program calculates the amount of time it will take to pay
   off a loam based on the loan amount, annual interest rate, and monthly
   payment.
